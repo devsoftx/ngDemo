@@ -1,0 +1,35 @@
+{
+  "name": "webapp-ang",
+  "version": "0.0.1",
+  "description": "Web app",
+  "bugs": {
+    "url": "http://devsoftx.net/issues",
+    "email": "fabricio.rojas@devsoftx.net"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Fabricio Rojas",
+    "email": "fabricio.rojas@devsoftx.net",
+    "url": "http://devsoftx.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devsoftx/webapp-ang"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "connect-history-api-fallback": "0.0.4",
+    "gulp": "^3.8.7",
+    "gulp-connect": "^2.0.6",
+    "gulp-if": "^1.2.4",
+    "gulp-inject": "^1.0.1",
+    "gulp-jshint": "^1.8.4",
+    "gulp-minify-css": "^0.3.7",
+    "gulp-stylus": "^1.3.0",
+    "gulp-uglify": "^0.3.1",
+    "gulp-useref": "^0.6.0",
+    "jshint-stylish": "^0.4.0",
+    "nib": "^1.0.3",
+    "wiredep": "^1.8.3"
+  }
+}

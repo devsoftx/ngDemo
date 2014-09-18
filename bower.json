@@ -1,0 +1,15 @@
+{
+  "name": "ebook-frontend-project",
+  "version": "0.0.1",
+  "description": "Ejemplo de desarrollo de aplicacion web con JavaScript",
+  "dependencies": {
+    "angular": "~1.2.23",
+    "bootstrap": "~3.2.0",
+    "angular-route": "~1.2.23",
+    "angular-resource": "~1.2.23",
+    "angular-bootstrap": "~0.11.0"
+  },
+  "devDependencies": {
+    "angular-bootstrap": "~0.11.0"
+  }
+}

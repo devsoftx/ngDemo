@@ -1,0 +1,12 @@
+body {
+  background: #fff;
+  color: #000;
+}
+.table-hover tbody tr:hover td{
+    background-color: red;
+}
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 1024px;
+    height: 900px;
+}
