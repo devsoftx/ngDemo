@@ -5,7 +5,12 @@
 	*
 	* Angular demo sample
 	*/
-	var app = angular.module('Miluz', ['ui.bootstrap', 'ngGrid']);
+	var app = angular.module('Miluz', ['ngResource', 'ui.bootstrap']);
+
+    app.factory('matchesFactory', function($resource) {
+      return $resource('http://worldcup.sfg.io/matches');
+    });
+
     app.controller('AlertCtrl', ['$scope', function($scope){
         $scope.alerts = [
             {type: 'danger', msg : 'Danger alert'},
@@ -20,69 +25,24 @@
         };
     }]);
 
-    app.controller('PaginationCtrl', ['$scope','$http', function($scope, $http){
-        $scope.filterOptions = {
-            filterText: "",
-            useExternalFilter: true
-        };
-        $scope.totalServerItems = 0;
-        $scope.pagingOptions = {
-            pageSizes: [25, 50, 100],
-            pageSize: 25,
-            currentPage: 1
-        };
-        $scope.setPagingData = function(data, page, pageSize){
-            var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-            $scope.myData = pagedData;
-            $scope.totalServerItems = data.length;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-        };
-        $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-            setTimeout(function () {
-                var data;
-                if (searchText) {
-                    var ft = searchText.toLowerCase();
-                    $http.get('http://worldcup.sfg.io/matches').success(function (largeLoad) {
-                        data = largeLoad.filter(function(item) {
-                            return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-                        });
-                        $scope.setPagingData(data,page,pageSize);
-                    });
-                } else {
-                    $http.get('http://worldcup.sfg.io/matches').success(function (largeLoad) {
-                        $scope.setPagingData(largeLoad,page,pageSize);
-                    });
-                }
-            }, 100);
+    app.controller('PaginationCtrl', ['$scope', function($scope, matchesFactory){
+        $scope.filtered = [];
+        $scope.matches = matchesFactory.query();
+        
+        $scope.itemsPerPage = 10
+        $scope.currentPage = 1;
+        $scope.pageCount = function () {
+          return Math.ceil($scope.matches.length / $scope.itemsPerPage);
         };
 
-        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-
-        $scope.$watch('pagingOptions', function (newVal, oldVal) {
-            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-                $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-            }
-        }, true);
-        $scope.$watch('filterOptions', function (newVal, oldVal) {
-            if (newVal !== oldVal) {
-                $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-            }
-        }, true);
-
-        $scope.gridOptions = {
-            data: 'myData',
-            enablePaging: true,
-            showFooter: true,
-            totalServerItems: 'totalServerItems',
-            pagingOptions: $scope.pagingOptions,
-            filterOptions: $scope.filterOptions,
-            columnDefs: [{field: 'match_number', displayName: 'match_number', width: 'auto'},
-                        {field: 'location', displayName: 'location', width: 'auto'},
-                        {field: 'status', displayName: 'status', width: 'auto'},
-                        {field: 'winner', displayName: 'winner', width: 'auto'}]
-        };
+        $scope.matches.$promise.then(function () {
+          $scope.totalItems = $scope.matches.length;
+          $scope.$watch('currentPage + itemsPerPage', function() {
+            var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+              end = begin + $scope.itemsPerPage;
+              $scope.filtered = $scope.matches.slice(begin, end);
+          });
+        });
     }]);
 
 	app.controller('MatchesCtrl', ['$http', function($http){
