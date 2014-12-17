@@ -25,27 +25,7 @@
         };
     }]);
 
-    app.controller('PaginationCtrl', ['$scope', function($scope, matchesFactory){
-        $scope.filtered = [];
-        $scope.matches = matchesFactory.query();
-        
-        $scope.itemsPerPage = 10
-        $scope.currentPage = 1;
-        $scope.pageCount = function () {
-          return Math.ceil($scope.matches.length / $scope.itemsPerPage);
-        };
-
-        $scope.matches.$promise.then(function () {
-          $scope.totalItems = $scope.matches.length;
-          $scope.$watch('currentPage + itemsPerPage', function() {
-            var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
-              end = begin + $scope.itemsPerPage;
-              $scope.filtered = $scope.matches.slice(begin, end);
-          });
-        });
-    }]);
-
-	app.controller('MatchesCtrl', ['$http', function($http){
+    app.controller('MatchesCtrl', ['$http', function($http){
 		var games = this;
 
 		$http({method: 'GET', url: 'http://worldcup.sfg.io/matches'}).
